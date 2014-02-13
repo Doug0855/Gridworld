@@ -1,0 +1,38 @@
+public class BlusterCritter extends Critter
+{
+  private int courage;
+
+  public BlusterCritter(int c)
+  {
+    this.courage = c;
+  }
+  public ArrayList<Actor> getActors()
+  {
+    ArrayList<Actor> actors = new ArrayList<Actor>();
+    Location myLoc = this.getLocation();
+
+    for (int row = myLoc.getRow() - 2; row <= myLoc.getRow() + 2; row++)
+    {
+      for (int col = myLoc.getCol() - 2; col <= myLoc.getCol() + 2; col++)
+      {
+        Location loc = new Location(row, col);
+        if (this.getGrid().isValid(loc))
+        {
+          Actor actorAtLoc = this.getGrid().get(loc);
+          if (actorAtLoc != null && actorAtLoc instanceof Critter)
+            actors.add(actorAtLoc);
+        }
+      }
+    }
+
+    actors.remove(this);
+    return actors;
+  }
+  public void processActors(ArrayList<Actor> actors)
+  {
+    if (actors.size() >= this.courage)
+      this.setColor(this.getColor().darker());
+    else
+      this.setColor(this.getColor().brighter());
+  }
+}
